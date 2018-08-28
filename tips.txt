@@ -1,0 +1,89 @@
+EXPERIENCE
+
+
+CvMat，Mat和IplImage之间的转化和拷贝 
+1,CvMat之间的复制
+//注意：深拷贝 - 单独分配空间，两者相互独立  
+CvMat* a;
+CvMat* b = cvCloneMat(a);   //copy a to b  
+2、Mat之间的复制
+//注意：浅拷贝 -  不复制数据只创建矩阵头，数据共享（更改a,b,c的任意一个都会对另外2个产生同样的作用）
+Mat a;
+Mat b = a; //a "copy" to b
+Mat c(a); //a "copy" to c
+
+//注意：深拷贝
+Mat a;
+Mat b = a.clone(); //a copy to b
+Mat c;
+a.copyTo(c); //a copy to c
+
+3、CvMat转Mat
+//使用Mat的构造函数：Mat::Mat(const CvMat* m, bool copyData=false);    默认情况下copyData为false
+CvMat* a;
+//注意：以下三种效果一致，均为浅拷贝
+Mat b(a);    //a "copy" to b
+Mat b(a, false);    //a "copy" to b
+Mat b = a;    //a "copy" to b
+
+//注意：当将参数copyData设为true后，则为深拷贝（复制整个图像数据）
+Mat b = Mat(a, true); //a copy to b
+
+4、Mat转CvMat
+
+//注意：浅拷贝
+Mat a;
+CvMat b = a; //a "copy" to b
+
+//注意：深拷贝
+Mat a;
+CvMat *b;
+CvMat temp = a; //转化为CvMat类型，而不是复制数据
+cvCopy(&temp, b); //真正复制数据 cvCopy使用前要先开辟内存空间
+
+==========IplImage与上述二者间的转化和拷贝===========
+1、IplImage之间的复制
+这个不赘述了，就是cvCopy与cvCloneImage使用区别，贴张网上的图：
+
+2、IplImage转Mat
+//使用Mat的构造函数：Mat::Mat(const IplImage* img, bool copyData=false);    默认情况下copyData为false
+IplImage* srcImg = cvLoadImage("Lena.jpg");
+//注意：以下三种效果一致，均为浅拷贝
+Mat M(srcImg);
+Mat M(srcImg, false);
+Mat M = srcImg;
+//注意：当将参数copyData设为true后，则为深拷贝（复制整个图像数据）
+Mat M(srcImg, true);
+
+3、Mat转IplImage
+//注意：浅拷贝 - 同样只是创建图像头，而没有复制数据
+Mat M;
+IplImage img = M;
+IplImage img = IplImage(M);
+//深拷贝
+cv::Mat img2;
+IplImage imgTmp = img2;
+IplImage *input = cvCloneImage(&imgTmp);
+
+4、IplImage转CvMat
+//法一：cvGetMat函数
+IplImage* img;
+CvMat temp;
+CvMat* mat = cvGetMat(img, &temp);    //深拷贝
+//法二：cvConvert函数
+CvMat *mat = cvCreateMat(img->height, img->width, CV_64FC3);    //注意height和width的顺序
+cvConvert(img, mat);    //深拷贝
+
+5、CvMat转IplImage
+
+//法一：cvGetImage函数
+CvMat M;
+IplImage* img = cvCreateImageHeader(M.size(), M.depth(), M.channels());
+cvGetImage(&M, img);    //深拷贝：函数返回img
+//也可写成
+CvMat M;
+IplImage* img = cvGetImage(&M, cvCreateImageHeader(M.size(), M.depth(), M.channels()));
+//法二：cvConvert函数
+CvMat M;
+IplImage* img = cvCreateImage(M.size(), M.depth(), M.channels());
+cvConvert(&M, img);    //深拷贝
