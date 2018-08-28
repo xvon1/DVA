@@ -9,10 +9,10 @@ library(qvalue)
 source("dva.R")
 source("MetricsOfCompar.R")
 
-pkyr.idx <- which(!(is.na(PhenoTypesLSCC.lv$race)));
+pkyr.idx <- which(!(is.na(PhenoTypesHNSC.lv$race)));
 exp.m <- exp.m[,pkyr.idx];
 
-PhenoTypesList<-list(Cancer=PhenoTypesLSCC.lv$cancer[pkyr.idx],gender=PhenoTypesLSCC.lv$gender[pkyr.idx],age= PhenoTypesLSCC.lv$age[pkyr.idx], race=PhenoTypesLSCC.lv$race[pkyr.idx])
+PhenoTypesList<-list(Cancer=PhenoTypesHNSC.lv$cancer[pkyr.idx],gender=PhenoTypesHNSC.lv$gender[pkyr.idx],age= PhenoTypesHNSC.lv$age[pkyr.idx], race=PhenoTypesHNSC.lv$race[pkyr.idx])
 rowmexp = rowMeans(log(exp.m+1)) 
 keepIndex=which(rowmexp > 1)
 dataOri.m = exp.m[keepIndex,]
