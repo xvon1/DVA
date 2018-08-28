@@ -1,6 +1,32 @@
-EXPERIENCE
-what is !
 
+==============================DVA===========================
+> corrDVA<-realDVA$sortcorre
+> View(corrDVA)
+> corrDVA[1,]
+    Sex        Race       Age       Cancer
+[1] 0.85075485 0.09908821 0.25775275 0.28758518
+> corrDVAIX<-realDVA$sortcorreIX
+> corrDVAIX[1,]
+[1] 10  8  9 15
+P不能用sort的 由corrDVAIX找corrDVAIX、dvaFstat[c,f]
+dvapv<-realDVA$pv
+dvapv[10,] [1] 4.427070e-128
+dvapv[9,] 2.619922e-08
+dvapv[8,]
+0.035001813
+> corrSVA<-realSVA$sortcorre
+> View(corrSVA)
+> corrSVA[1,]
+[1] 0.09851819 0.01459026 0.13169701 0.01787345
+> corrSVAIX<-realSVA$sortcorreIX
+> corrSVAIX[1,]
+[1] 2 2 2 2
+svapv<-realSVA$pv
+svapv[2,]
+[1] 0.036068933 0.756793147 0.004992677 0.704395228
+
+
+----------------------------------------------------------------
 CvMat，Mat和IplImage之间的转化和拷贝 
 1,CvMat之间的复制
 //注意：深拷贝 - 单独分配空间，两者相互独立  
@@ -87,3 +113,26 @@ IplImage* img = cvGetImage(&M, cvCreateImageHeader(M.size(), M.depth(), M.channe
 CvMat M;
 IplImage* img = cvCreateImage(M.size(), M.depth(), M.channels());
 cvConvert(&M, img);    //深拷贝
+======================================宏=================
+
+#if defined __DRAW_IMPL__
+	#if (defined _AFXDLL && !defined __STAT_WITH_DLLMFC__)
+		#define __DRAW_API _declspec(dllexport)
+	#else
+		#define __DRAW_API
+	#endif // _AFXDLL
+#else 
+	#if (defined _AFXDLL && !defined __STAT_WITH_DLLMFC__)
+		#define __DRAW_API _declspec(dllimport)
+	#else
+		#define __DRAW_API
+	#endif // _AFXDLL
+
+	#pragma message("      (Professional User Interface Suite)")
+	#pragma comment( lib, __DRAW_LIB_NAME ) 
+#endif
+一般在编写动态链接库里的类时，经常会定义象上面的宏，主要是为了使用方便，这样在编写库时，只要定义了__DRAW_IMPL__宏，所有动态库中的类都会自动导出，
+例如：class __DRAW_API A{};编译时会被展开成calss _declspec(dllexport) A{};
+而在用户使用时，因为没有定义__DRAW_IMPL__宏，所有的类自动加上dllimport成为导入类,成为class _declspec(import).
+如果静态链接时或者直接使用时，只要定义了__STAT_WITH_DLLMFC__宏，相当于直接定义类,__DRAW_API被展开成空串.
+。宏定义是C提供的三种预处理功能的其中一种，这三种预处理包括：宏定义、文件包含、条件编译
