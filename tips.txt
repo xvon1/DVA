@@ -1,4 +1,15 @@
 
+
+
+-----------------------------------------------------------
+> length(which(PhenoTypesLIHC.lv$cancer==0))
+[1] 50
+> length(which(PhenoTypesLIHC.lv$cancer==1))
+[1] 349
+> length(which(PhenoTypesLIHC.lv$gender==1))
+[1] 263
+> length(which(PhenoTypesLIHC.lv$gender==0))
+[1] 136
 ==============================DVA===========================
 > corrDVA<-realDVA$sortcorre
 > View(corrDVA)
