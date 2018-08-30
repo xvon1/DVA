@@ -30,6 +30,7 @@ using namespace cv;
 #define SPECIAL0     370
 #define SPECIAL1     40
 #define SPECIAL2     25
+#define SPECIAL3     875
 #define VFLAWLEN     50
 #define ANGTHRE      15
 //////////////////////////////////////////////////////////////////////////
@@ -2931,7 +2932,7 @@ void calRAngle(char * txtName,char * fnametxt)
 }
 
 
-void ContourGeneralFilter(vector<vector<cv::Point>> &contours,vector<vector<cv::Point>> &resultContours,int clipx,int clipy,double widthTh,double heightTh,double areaTh,double periTh,double lenTh,double angTh)
+void ContourGeneralFilter(vector<vector<cv::Point>> &contours,vector<vector<cv::Point>> &resultContours,int clipx,int clipy,double widthTh=1,double heightTh=1,double areaTh=5,double periTh=5,double lenTh=15,double angTh=5)
 {
 
 	for(int j=0;j<contours.size();j++){
@@ -3006,46 +3007,6 @@ void ContourGeneralFilter(vector<vector<cv::Point>> &contours,vector<vector<cv::
 
 }
 
-
-void SobelRespectiveXY(const cv::Mat &image,vector<vector<cv::Point>> &resultContours, int clipx,int clipy)
-{
-
-	cv::Mat lightYSobel,greenYSobel;
-	cv::Sobel(image,greenYSobel,CV_8U,0,1);
-	//cv::Sobel(labChannels[0],lightYSobel,CV_8U,0,1);  bgrChannels[1]
-	//cv::threshold(lightYSobel,lightYSobel,30,255,CV_THRESH_BINARY);
-	cv::threshold(greenYSobel,greenYSobel,35,255,CV_THRESH_BINARY);
-	//cv::Mat medianGreenImage;
-	//cv::medianBlur(greenYSobel,medianGreenImage,5);
-
-	vector<std::vector<cv::Point>> contours;
-	std::vector<cv::Vec4i> hierarchy;
-	cv::Mat temp=greenYSobel.clone();
-	cv::findContours(temp,contours,hierarchy,CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
-
-	ContourGeneralFilter(contours,resultContours,clipx,clipy,1,1,5,5,15,5);
-	contours.clear();
-	hierarchy.clear();
-
-	cv::Mat lightXSobel,greenXSobel;
-	cv::Sobel(image,greenXSobel,CV_8U,1,0);
-	//cv::Sobel(labChannels[0],lightXSobel,CV_8U,1,0);
-
-	cv::threshold(greenXSobel,greenXSobel,45,255,CV_THRESH_BINARY);
-	//cv::threshold(lightXSobel,lightXSobel,35,255,CV_THRESH_BINARY);
-	temp.release();
-	temp=greenXSobel.clone();
-	//resultImage.release();
-	//resultImage=quenchPartImage.clone();
-	cv::findContours(temp,contours,hierarchy,CV_RETR_CCOMP,CV_CHAIN_APPROX_NONE);
-	ContourGeneralFilter(contours,resultContours,clipx,clipy,1,1,10,5,20,10);
-}
-
-
-
-
-
-
 void ContourPreciseFilter(vector<vector<cv::Point>> &contours,vector<vector<cv::Point>> &resultContours,int baseline)
 {
 	for(int j=0;j<contours.size();j++){
@@ -3083,12 +3044,16 @@ void ContourPreciseFilter(vector<vector<cv::Point>> &contours,vector<vector<cv::
 			continue;
 		else if(int(meanCoord[1])>=(baseline-SPECIAL1-5) && int(meanCoord[1])<=(baseline-SPECIAL1+5))
 			continue;
-		else if(int(meanCoord[1])>=(baseline+SPECIAL2-4) && int(meanCoord[1])<=(baseline+SPECIAL2+4))
+		else if(int(meanCoord[1])>=(baseline+SPECIAL2-5) && int(meanCoord[1])<=(baseline+SPECIAL2+5))
 		{
 			if( abs(longSideAngle)<=ANGTHRE || abs(abs(longSideAngle)-180)<=ANGTHRE)
 				continue;
 		}
-
+		else if(int(meanCoord[1])>=(baseline+SPECIAL3-25) && int(meanCoord[1])<=(baseline+SPECIAL3+25))
+		{
+			if( abs(longSideAngle)<=25|| abs(abs(longSideAngle)-180)<=25 || abs(longSideAngle+145)<=ANGTHRE)
+				continue;
+		}
 		if(meanCoord[1]<=(baseline-SPECIAL1))
 		{
 			if(longSide<=VFLAWLEN)
@@ -3096,9 +3061,9 @@ void ContourPreciseFilter(vector<vector<cv::Point>> &contours,vector<vector<cv::
 		}
 
 
-		if(abs(longSideAngle+145)<=ANGTHRE){
-			continue;
-		}
+		//if(abs(longSideAngle+145)<=ANGTHRE){
+		//	continue;
+		//}
 		//writeAngle((float)longSideAngle,"c:\\1");
 
 
@@ -3108,6 +3073,42 @@ void ContourPreciseFilter(vector<vector<cv::Point>> &contours,vector<vector<cv::
 	}
 }
 
+
+
+
+void SobelRespectiveXY(const cv::Mat &image,vector<vector<cv::Point>> &resultContours, int clipx,int clipy)
+{
+	cv::Mat lightYSobel,greenYSobel;
+	cv::Sobel(image,greenYSobel,CV_8U,0,1);
+	//cv::Sobel(labChannels[0],lightYSobel,CV_8U,0,1);  bgrChannels[1]
+	//cv::threshold(lightYSobel,lightYSobel,30,255,CV_THRESH_BINARY);
+	cv::threshold(greenYSobel,greenYSobel,35,255,CV_THRESH_BINARY);
+	//cv::Mat medianGreenImage;
+	//cv::medianBlur(greenYSobel,medianGreenImage,5);
+
+	vector<std::vector<cv::Point>> contours;
+	std::vector<cv::Vec4i> hierarchy;
+	cv::Mat temp=greenYSobel.clone();
+	cv::findContours(temp,contours,hierarchy,CV_RETR_EXTERNAL,CV_CHAIN_APPROX_NONE);
+
+	//ContourGeneralFilter(contours,resultContours,clipx,clipy,1,1,5,5,15,5);
+	ContourGeneralFilter(contours,resultContours,clipx,clipy);
+	contours.clear();
+	hierarchy.clear();
+
+	cv::Mat lightXSobel,greenXSobel;
+	cv::Sobel(image,greenXSobel,CV_8U,1,0);
+	//cv::Sobel(labChannels[0],lightXSobel,CV_8U,1,0);
+
+	cv::threshold(greenXSobel,greenXSobel,45,255,CV_THRESH_BINARY);
+	//cv::threshold(lightXSobel,lightXSobel,35,255,CV_THRESH_BINARY);
+	temp.release();
+	temp=greenXSobel.clone();
+	//resultImage.release();
+	//resultImage=quenchPartImage.clone();
+	cv::findContours(temp,contours,hierarchy,CV_RETR_CCOMP,CV_CHAIN_APPROX_NONE);
+	ContourGeneralFilter(contours,resultContours,clipx,clipy,1,1,10,5,20,10);
+}
 void SobelBatch(char * txtName,char * fnametxt)
 {
 	Mat image = imread(txtName);
@@ -3150,8 +3151,6 @@ void SobelAmp(const cv::Mat &image,vector<vector<cv::Point>> &resultContours, in
     ContourGeneralFilter(contours,resultContours,clipx,clipy,1,1,5,5,15,5);
 
 //////////////////////////////////////////////////////////////////////////
-	
-
 }
 void SobelAmpBatch(char * txtName,char * fnametxt)
 {
