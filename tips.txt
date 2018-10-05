@@ -1,7 +1,26 @@
 
 
+:
+============================Mac==========================
+command not found :看source ~/.bash_profile是否有问题
+(1)将/usr/udt中的所有文件移到当前目录(用”.”表示)中：
+$ mv /usr/udt/* .
+(2)将文件test.txt重命名为wbk.txt：
+$ mv test.txt wbk.txt
+Mac终端配置
+export CLICOLOR=1
+export PS1='\[\033[01;33m\]\u@\h\[\033[01;31m\] \W\$\[\033[00m\] '
+放～把这段代码放到 主目录的 .bash_profile 里，然后 source ~/.bash_profile
+========================git command========================
+git init
+git add
+git commit
+git remote add origin https://git.coding.net/用户名/项目名.git
+git push origin master
+git reset --hard a2a514
+git reset --hard HEAD^
 
------------------------------------------------------------
+==============================cancer and sex===============
 > length(which(PhenoTypesLIHC.lv$cancer==0))
 [1] 50
 > length(which(PhenoTypesLIHC.lv$cancer==1))
