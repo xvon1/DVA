@@ -1,5 +1,7 @@
 
+https://www.ncbi.nlm.nih.gov/geo/
 
+<<<<<<< HEAD
 :
 ============================Mac==========================
 command not found :看source ~/.bash_profile是否有问题
@@ -21,6 +23,15 @@ git reset --hard a2a514
 git reset --hard HEAD^
 
 ==============================cancer and sex===============
+=======
+mac下执行gt操作或者make编译时，可能会出现如下错误：
+xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun
+可能是由于xcode问题造成的，可在终端中执行如下命令：
+xcode-select --install
+系统弹出下载xcode相关插件，大概1分钟安装完毕
+
+-----------------------------------------------------------
+>>>>>>> a003f4ef51702f53e4bcba0b9d5e1e2e3d2c20a4
 > length(which(PhenoTypesLIHC.lv$cancer==0))
 [1] 50
 > length(which(PhenoTypesLIHC.lv$cancer==1))

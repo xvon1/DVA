@@ -3046,12 +3046,12 @@ void ContourPreciseFilter(vector<vector<cv::Point>> &contours,vector<vector<cv::
 			continue;
 		else if(int(meanCoord[1])>=(baseline+SPECIAL2-5) && int(meanCoord[1])<=(baseline+SPECIAL2+5))
 		{
-			if( abs(longSideAngle)<=ANGTHRE || abs(abs(longSideAngle)-180)<=ANGTHRE)
+			if( abs(longSideAngle)<=ANGTHRE || abs(abs(longSideAngle)-180)<=ANGTHRE || abs(longSideAngle+145)<=ANGTHRE)
 				continue;
 		}
-		else if(int(meanCoord[1])>=(baseline+SPECIAL3-25) && int(meanCoord[1])<=(baseline+SPECIAL3+25))
+		else if(int(meanCoord[1])>=(baseline+SPECIAL3-20) && int(meanCoord[1])<=(baseline+SPECIAL3+30))
 		{
-			if( abs(longSideAngle)<=25|| abs(abs(longSideAngle)-180)<=25 || abs(longSideAngle+145)<=ANGTHRE)
+			if( abs(longSideAngle)<=ANGTHRE+5|| abs(abs(longSideAngle)-180)<=ANGTHRE+5 || abs(longSideAngle+145)<=ANGTHRE)
 				continue;
 		}
 		if(meanCoord[1]<=(baseline-SPECIAL1))
@@ -3124,10 +3124,13 @@ void SobelBatch(char * txtName,char * fnametxt)
 
 	cv::Rect quenchRoi(clipx,clipy,image.cols,ROIH0);
 	cv::Mat quenchPartImage=image(quenchRoi).clone();
-	imwrite("c:\\1\\rlt.jpg",quenchPartImage);
 	cv::Mat resultImage=image.clone();
 
-
+//special zone
+	cv::Rect specialRoi(0,baseLine+SPECIAL2-5,image.cols,15);
+	cv::Mat  specialImage=image(specialRoi).clone();
+	cv::imwrite("c:\\1\\rlt.jpg",specialImage);
+//
 	cv::split(quenchPartImage,bgrChannels);
 	SobelRespectiveXY(bgrChannels[1],resultContours,clipx,clipy);
 	ContourPreciseFilter(resultContours,resultContours1,baseLine);
