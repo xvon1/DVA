@@ -3,7 +3,7 @@ Decision Variable Analysis
 Package:dva
 Title: Discovering potential key features of genome wide profiling data using Decision Variable Analysis
 Version: 0.0.0.1000
-Authors: Feng Xie, Cheng Li, Yungang He, et al.
+Authors: Feng Xie, Cheng Li, Jie Xie, et al.
 Depends: R (>= 3.4.4)
 License: GNU General Public License(GPL)
 Encoding: UTF-8
