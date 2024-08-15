@@ -19,8 +19,8 @@ dva<-function(data.m,pheno.v,imTh=0.50){
     if(dim(data.m)[1] < 500){
       nsig<-dim(data.m)[1] 
     }else{ 
-      if(nsig < 500){
-        nsig<-500
+      if(nsig < 200){
+        nsig<-200
       }
     }
     red.m <- data.m[tmp.s$ix[1:nsig], ]
