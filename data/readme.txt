@@ -1,6 +1,6 @@
 ﻿This folder includes an example of original gene expression profile (RSEM value) of RNAseqV2 and corresponding phenotypes of individal samples for KIRC colleced from TCGA. 
 
-Abbreviation:
+Abbreviation
 KIRC: Kidney renal clear cell carcinoma
 
 The phenotypes for this cancer type mainly include:
