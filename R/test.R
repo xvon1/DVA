@@ -1,8 +1,6 @@
 library(fastICA)
 library(qvalue)
-
 source("dva.R")
-
 
 pkyr.idx <- which(!(is.na(PhenoTypesKIRC.lv$race)));
 exp.m <- exp.m[,pkyr.idx];
