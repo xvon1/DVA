@@ -1,7 +1,7 @@
 ## DVA function
 Decision Variable Analysis
 Package:dva
-Title: Discovering potential key features of genome wide profiling data using Decision Variable Analysis
+Title: Decision variables to be discovered in modelling high-dimensional omics data for cancer studies
 Version: 0.0.0.1000
 Authors: Feng Xie, Cheng Li, Jie Xie, et al.
 Depends: R (>= 3.4.4)
